@@ -14,26 +14,21 @@ def update_dotenv(token):
     import re
     import os
 
-    # Caminho do arquivo .env
     env_file = os.path.join(os.path.dirname(__file__), ".env")
 
-    # Novo valor do AUTHTOKEN
     novo_authtoken = token
 
-    # Lendo o arquivo e substituindo o valor de AUTHTOKEN
     with open(env_file, "r", encoding="utf-8") as file:
         conteudo = file.read()
 
-    # Substituir o valor do AUTHTOKEN
     conteudo_atualizado = re.sub(r'(AUTHTOKEN\s*=\s*)".*?"', rf'\1"{novo_authtoken}"', conteudo)
 
-    # Escrever o novo conteúdo de volta no arquivo
     with open(env_file, "w", encoding="utf-8") as file:
         file.write(conteudo_atualizado)
 
     print("AUTHTOKEN atualizado com sucesso!")
 
-# 8, 12, 15 18 21
+
 def main_func():
     authtoken = Get_Token().start()
     if authtoken:
@@ -45,7 +40,7 @@ def main_func():
         CarregamentoTroncal().main()
         CarregamentoSecundaria().main()
 
-# Agendar a função para rodar nos horários especificados
+
 schedule.every().day.at("08:00").do(main_func)
 schedule.every().day.at("12:00").do(main_func)
 schedule.every().day.at("15:00").do(main_func)
