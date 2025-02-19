@@ -30,6 +30,9 @@ def update_dotenv(token):
 
 
 def main_func():
+
+    print("Rodou tal Hora lá")
+
     authtoken = Get_Token().start()
     if authtoken:
         update_dotenv(authtoken)
@@ -39,13 +42,20 @@ def main_func():
 
         CarregamentoTroncal().main()
         CarregamentoSecundaria().main()
+        
+    print("Dados atualizados com sucesso!")
 
 
 schedule.every().day.at("08:00").do(main_func)
 schedule.every().day.at("12:00").do(main_func)
 schedule.every().day.at("15:00").do(main_func)
+
+schedule.every().day.at("17:25").do(main_func)
+
 schedule.every().day.at("18:00").do(main_func)
 schedule.every().day.at("21:00").do(main_func)
+
+main_func()
 
 while True:
     schedule.run_pending()
