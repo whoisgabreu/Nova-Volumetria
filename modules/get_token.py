@@ -53,7 +53,7 @@ class Get_Token(): # Logar no JMS e retornar informações continas nos Cookies(
         "download.prompt_for_download": False,
         "download.directory_upgrade": True}
         self.options.add_experimental_option("prefs",prefs)
-        user_data_dir = os.path.join(os.path.expanduser("~"), "AppData", "Local", "Google", "Chrome", "User Data", "Projetos Matriz")
+        user_data_dir = os.path.join(os.path.expanduser("~"), "AppData", "Local", "Google", "Chrome", "User Data", "Projetos Volumetria")
         self.options.add_argument(f"user-data-dir={user_data_dir}")
 
         self.driver = webdriver.Chrome(options=self.options)
@@ -66,13 +66,28 @@ class Get_Token(): # Logar no JMS e retornar informações continas nos Cookies(
         return userData.get("staffNo",""), authToken, userData.get("networkCode")
 
     def start(self):
-        sleep(5)
-        while self.driver.current_url == self.url:
-            CaptchaSolverYOLO().login(self.driver,self._login,self._password)
-            if self.driver.current_url != self.url:
-                break
+        # sleep(5)
+        # while self.driver.current_url == self.url:
+        #     sleep(3)
+        #     if self.driver.current_url != self.url:
+        #         break
+        #     CaptchaSolverYOLO().login(self.driver,self._login,self._password)
 
-        self.userData, self.authToken, self.userNetworkCode = self.extractCookies()
+
+        self.driver.refresh()
+
+        while not self.authToken:
+            sleep(5)
+
+            try:
+                self.userData, self.authToken, self.userNetworkCode = self.extractCookies()
+                print(self.authToken, "coletado")
+            except:
+                CaptchaSolverYOLO().login(self.driver,self._login,self._password)
+                print(self.authToken, "tentando coletar")
+                pass
+
+        # self.userData, self.authToken, self.userNetworkCode = self.extractCookies()
 
         if self.userData and self.authToken:
             # self.driver.set_window_size(1, 1)

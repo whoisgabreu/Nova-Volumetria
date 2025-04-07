@@ -5,12 +5,15 @@ import datetime
 import re
 from .db_connection import Db_Connection
 from dotenv import load_dotenv
+import time
 
 class IdTroncal:
     def __init__(self):
-        load_dotenv()
+        load_dotenv(override = True)
+        time.sleep(2)
         self._authtoken = os.getenv("AUTHTOKEN")
-        self._start_date = datetime.datetime.today().date() - datetime.timedelta(days = 3)
+        print(self._authtoken)
+        self._start_date = datetime.datetime.today().date() - datetime.timedelta(days = 2)
         self._end_date = datetime.datetime.today().date()
         self._url = "https://gw.jtjms-br.com/transportation/tmsShipment/page"
         self._headers = {
@@ -55,13 +58,14 @@ class IdTroncal:
 
         params = {
             "current": 1,
-            "size": 300,
+            "size": 200,
             "startDateTime": f"{self._start_date} 22:00:00",
             "endDateTime": f"{self._end_date} 23:59:59",
             "searchType": "manage"
         }
 
-        shipmentNos = requests.get(url = self._url, params = params, headers = self._headers).json()["data"]["records"]
+        response = requests.get(url = self._url, params = params, headers = self._headers)
+        shipmentNos = response.json()["data"]["records"]
 
 
         for shipmentNo in shipmentNos:
@@ -102,8 +106,8 @@ class IdTroncal:
         conn = connection.get_conn()
 
 
-        dados_ids = IdTroncal().get_shipment_no()
-        print("Coletando ID de viagem...")
+        dados_ids = self.get_shipment_no()
+        print("\nColetando ID de viagem...\n")
 
         # # Inserção dos dados no DB
         # clear_table = "DELETE FROM public.shipment_nos;"
@@ -146,4 +150,4 @@ class IdTroncal:
         conn.commit()
         cursor.close()
         conn.close()
-        print("Dados inseridos na tabela 'public.shipment_nos'!")
+        print("Dados inseridos na tabela 'public.shipment_nos'!\n")

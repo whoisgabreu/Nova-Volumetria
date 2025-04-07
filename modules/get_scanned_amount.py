@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 class CarregamentoTroncal:
     def __init__(self):
-        load_dotenv()
+        load_dotenv(override = True)
         self._authtoken = os.getenv("AUTHTOKEN")
         self._url = "https://gw.jtjms-br.com/transportation/trackingDeatil/loading/scan/page"
         self._headers = {
@@ -202,11 +202,11 @@ class CarregamentoTroncal:
         """)
 
         shipments = cursor.fetchall()
-        print("Coletando ID de viagem da tabela 'public.shipment_nos'...")
+        print("\nColetando ID de viagem da tabela 'public.shipment_nos'...\n")
 
         for shipment in shipments:
             all_scanned_waybill_no += self.get_scanned_amound(shipmentNo = shipment[0], planned_arrival_time = shipment[1], actual_arrival_time = shipment[2])
-        print("Coletando dados de carregamento...")
+        print("Coletando dados de carregamento...\n")
 
         # Supondo que 'all_scanned_waybill_no' seja sua lista de dicionários com os dados
         df = pd.DataFrame(all_scanned_waybill_no)
@@ -220,4 +220,4 @@ class CarregamentoTroncal:
         conn.commit()
         cursor.close()
         conn.close()
-        print("Dados de Carregamento inseridos na tabela 'public.scanned_amount'!")
+        print("Dados de Carregamento inseridos na tabela 'public.scanned_amount'!\n")

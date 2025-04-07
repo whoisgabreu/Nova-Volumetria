@@ -7,7 +7,7 @@ class Db_Connection:
 
     def __init__(self):
 
-        load_dotenv()
+        load_dotenv(override = True)
         DB_NAME = os.getenv("DB_NAME")
         USER = os.getenv("USER")
         PD = os.getenv("PD")

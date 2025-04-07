@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 
 class IdSecundaria:
     def __init__(self):
-        load_dotenv()
+        load_dotenv(override = True)
         self._authtoken = os.getenv("AUTHTOKEN")
-        self._start_date = datetime.datetime.today().date() - datetime.timedelta(days=3)
+        self._start_date = datetime.datetime.today().date() - datetime.timedelta(days=2)
         self._end_date = datetime.datetime.today().date() + datetime.timedelta(days=1)
         self._url = "https://gw.jtjms-br.com/transportation/tmsBranchTrackingDetail/page"
         self._headers = {
@@ -137,7 +137,7 @@ class IdSecundaria:
 
 
         dados_ids = IdSecundaria().get_shipment_no()
-        print("Coletando ID de viagem...")
+        print("\nColetando ID de viagem...\n")
 
         # # Inserção dos dados no DB
         # clear_table = "DELETE FROM public.shipment_nos_sec;"
@@ -180,4 +180,4 @@ class IdSecundaria:
         conn.commit()
         cursor.close()
         conn.close()
-        print("Dados inseridos na tabela 'public.shipment_nos'!")
+        print("Dados inseridos na tabela 'public.shipment_nos'!\n")
